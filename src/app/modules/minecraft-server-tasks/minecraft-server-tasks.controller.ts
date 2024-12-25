@@ -71,6 +71,16 @@ export class MinecraftServerTasksController {
     return { message: 'Stopping forge server' };
   }
 
+  @Post('kill-forge-server')
+  async killForgeServer(@ServerId(ParseUUIDPipe) serverId: string) {
+    const result =
+      await this.minecraftServerTasksService.findForgeServerRunningTask(
+        serverId,
+      );
+    this.client.emit('kill-forge-server', { ...result });
+    return { message: 'Killing forge server' };
+  }
+
   @Get()
   findAll(
     @ServerId(ParseUUIDPipe) serverId: string,
