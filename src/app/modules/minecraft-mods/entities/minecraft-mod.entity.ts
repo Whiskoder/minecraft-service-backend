@@ -34,6 +34,6 @@ export class MinecraftMod {
   })
   createdAt!: Date;
 
-  @ManyToMany(() => MinecraftServer, (server) => server.mods)
+  @ManyToMany(() => MinecraftServer)
   servers: MinecraftServer[];
 }

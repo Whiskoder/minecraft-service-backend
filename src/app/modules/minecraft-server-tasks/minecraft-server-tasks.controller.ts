@@ -39,6 +39,17 @@ export class MinecraftServerTasksController {
     return { message: 'Installing forge server' };
   }
 
+  @Post('run-install-mods')
+  async runInstallMods(@ServerId(ParseUUIDPipe) serverId: string) {
+    const result = await this.minecraftServerTasksService.createTask(
+      serverId,
+      TaskType.MOD_INSTALLER,
+    );
+
+    this.client.emit('run-install-mods', { ...result });
+    return { message: 'Installing mods' };
+  }
+
   @Post('run-forge-server')
   async runForgeServer(@ServerId(ParseUUIDPipe) serverId: string) {
     const result = await this.minecraftServerTasksService.createTask(

@@ -33,6 +33,7 @@ export class MinecraftServerTasksService {
       const minecraftServerEntity =
         await this.minecraftServerRepository.findOne({
           where: { id: serverId, isActive: true },
+          relations: ['mods'],
         });
 
       if (!minecraftServerEntity)
@@ -100,7 +101,7 @@ export class MinecraftServerTasksService {
             type: TaskType.FORGE_SERVER,
             status: TaskStatus.RUNNING,
           },
-          relations: ['server'],
+          relations: ['server', 'server.mods'],
         });
 
       if (!minecraftServerTaskEntity)

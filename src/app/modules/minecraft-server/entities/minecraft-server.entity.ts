@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -60,7 +61,8 @@ export class MinecraftServer {
   })
   minMemoryUnit: MemoryUnit;
 
-  @ManyToMany(() => MinecraftMod, (mods) => mods.servers)
+  @ManyToMany(() => MinecraftMod)
+  @JoinTable()
   mods: MinecraftMod[];
 
   @Column({

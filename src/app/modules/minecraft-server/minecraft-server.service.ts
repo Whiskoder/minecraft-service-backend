@@ -30,9 +30,14 @@ export class MinecraftServerService {
   ) {}
 
   async create(createMinecraftServerDto: CreateMinecraftServerDto) {
+    let name = createMinecraftServerDto.name
+      .toLowerCase()
+      .trim()
+      .replaceAll(' ', '-');
+
     try {
       const exists = await this.minecraftServerRepository.findOne({
-        where: { name: createMinecraftServerDto.name, isActive: true },
+        where: { name, isActive: true },
       });
 
       if (exists)
