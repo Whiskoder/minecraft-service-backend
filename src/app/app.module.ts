@@ -8,6 +8,8 @@ import { DatabaseModule } from '@database/database.module';
 import { envs } from '@config/envs.config';
 import { MinecraftForgeModule } from '@modules/minecraft-forge/minecraft-forge.module';
 import { MinecraftModsModule } from '@modules/minecraft-mods/minecraft-mods.module';
+import { MinecraftServerTasksModule } from '@modules/minecraft-server-tasks/minecraft-server-tasks.module';
+import { MinecraftServerModule } from '@modules/minecraft-server/minecraft-server.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { MinecraftModsModule } from '@modules/minecraft-mods/minecraft-mods.modu
     MinecraftModsModule,
     MinecraftForgeModule,
     BucketModule,
+    MinecraftServerTasksModule,
+    MinecraftServerModule,
   ],
   controllers: [],
   providers: [

@@ -2,24 +2,24 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToMany,
+  OneToMany,
   PrimaryColumn,
 } from 'typeorm';
 
 import { uuid } from '@config/plugins/uuid.plugin';
 import { MinecraftServer } from '@modules/minecraft-server/entities/minecraft-server.entity';
 
-@Entity({ name: 'minecraft_mods' })
-export class MinecraftMod {
+@Entity({ name: 'minecraft_forge' })
+export class MinecraftForge {
   @PrimaryColumn()
   id: string = uuid.v7();
 
   @Column({
     type: 'varchar',
-    length: 255,
+    length: 10,
     unique: true,
   })
-  fileName: string;
+  version: string;
 
   @Column({
     type: 'bigint',
@@ -34,6 +34,6 @@ export class MinecraftMod {
   })
   createdAt!: Date;
 
-  @ManyToMany(() => MinecraftServer, (server) => server.mods)
-  servers: MinecraftServer[];
+  @OneToMany(() => MinecraftServer, (server) => server.forge)
+  server: MinecraftServer[];
 }

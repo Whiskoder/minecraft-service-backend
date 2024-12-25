@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Repository } from 'typeorm';
 import { Readable } from 'typeorm/platform/PlatformTools';
+import { Repository } from 'typeorm';
 
 import { BucketService } from '@modules/bucket/bucket.service';
 import { envs } from '@config/envs.config';
@@ -28,11 +28,11 @@ export class MinecraftModsService {
     this.url = envs.hostUrl;
   }
 
-  async upload(minecraftJarFile: Express.Multer.File) {
+  async upload(jarFile: Express.Multer.File) {
     try {
       const minecraftModEntity = this.minecraftModRepository.create({
-        fileName: minecraftJarFile.originalname,
-        fileSize: minecraftJarFile.size,
+        fileName: jarFile.originalname,
+        fileSize: jarFile.size,
       });
       await this.minecraftModRepository.save(minecraftModEntity);
 
@@ -40,10 +40,7 @@ export class MinecraftModsService {
 
       const key = `mods/${id}`;
 
-      const response = await this.bucketService.putObject(
-        key,
-        minecraftJarFile,
-      );
+      const response = await this.bucketService.putObject(key, jarFile);
       if (response.$metadata.httpStatusCode !== 200) {
         this.minecraftModRepository.delete({ id });
         throw new InternalServerErrorException();

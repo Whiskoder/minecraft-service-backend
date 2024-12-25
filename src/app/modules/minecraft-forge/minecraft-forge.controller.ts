@@ -2,30 +2,33 @@ import {
   Controller,
   Get,
   Post,
+  Body,
+  Patch,
   Param,
   Delete,
   UseInterceptors,
   UploadedFile,
   ParseFilePipe,
   FileTypeValidator,
-  ParseUUIDPipe,
-  Res,
   Query,
+  Res,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { from, switchMap } from 'rxjs';
 import { Response } from 'express';
 
-import { MinecraftModsService } from '@modules/minecraft-mods/minecraft-mods.service';
+import { MinecraftForgeService } from '@modules/minecraft-forge/minecraft-forge.service';
 import { PaginationDto } from '@common/dto/pagination.dto';
+import { ParseVersionPipe } from '@modules/minecraft-forge/pipes/parse-version/parse-version.pipe';
 
 @Controller({
-  path: 'minecraft/mods',
+  path: 'minecraft/forge',
   version: '1',
 })
-export class MinecraftModsController {
-  constructor(private readonly minecraftModsService: MinecraftModsService) {}
+export class MinecraftForgeController {
+  constructor(private readonly minecraftForgeService: MinecraftForgeService) {}
 
   @Post()
   @UseInterceptors(
@@ -42,18 +45,22 @@ export class MinecraftModsController {
       }),
     )
     jarFile: Express.Multer.File,
+    @Body('version') version: string,
   ) {
-    return this.minecraftModsService.upload(jarFile);
+    return this.minecraftForgeService.upload(jarFile, version);
   }
 
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
-    return this.minecraftModsService.findAll(paginationDto);
+    return this.minecraftForgeService.findAll(paginationDto);
   }
 
-  @Get(':id')
-  download(@Res() res: Response, @Param('id', ParseUUIDPipe) id: string) {
-    from(this.minecraftModsService.download(id))
+  @Get(':version')
+  download(
+    @Res() res: Response,
+    @Param('version', ParseVersionPipe) version: string,
+  ) {
+    from(this.minecraftForgeService.download(version))
       .pipe(
         switchMap(({ fileStream, fileName }) => {
           res.setHeader(
@@ -72,7 +79,7 @@ export class MinecraftModsController {
       .subscribe({
         error: (e) => {
           if (e.status || e.$metadata.httpStatusCode === 404) {
-            res.status(404).send('Minecraft mod not found');
+            res.status(404).send('Minecraft forge version not found');
           } else {
             res.status(500).send('Internal Server Error');
           }
@@ -81,7 +88,7 @@ export class MinecraftModsController {
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseUUIDPipe) id: string) {
-    return this.minecraftModsService.delete(id);
+  dekete(@Param('id', ParseUUIDPipe) id: string) {
+    return this.minecraftForgeService.delete(id);
   }
 }

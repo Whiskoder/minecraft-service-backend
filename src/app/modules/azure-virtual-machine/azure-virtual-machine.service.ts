@@ -50,6 +50,7 @@ export class AzureVirtualMachineService {
       scope,
     });
 
+    // TODO: Create plugin for axios
     const response = await axios.post(url, body, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
@@ -66,7 +67,7 @@ export class AzureVirtualMachineService {
   async runCommand(command: string) {
     const params = {
       commandId: 'RunShellScript',
-      script: ['echo Hello World'],
+      script: ['cd ~/minecraft && curl -O '],
     };
     const result = await this.client.virtualMachines.beginRunCommandAndWait(
       this.resourceGroupName,

@@ -23,6 +23,8 @@ interface EnvsVariables {
   AZURE_CLIENT_ID: string;
   AZURE_CLIENT_SECRET: string;
   AZURE_TENANT_ID: string;
+  MINECRAFT_SERVER_COMMANDS_MICROSERVICE_HOST: string;
+  MINECRAFT_SERVER_COMMANDS_MICROSERVICE_PORT: number;
 }
 
 const envsSchema = joi
@@ -48,6 +50,8 @@ const envsSchema = joi
     AZURE_CLIENT_ID: joi.string().required(),
     AZURE_CLIENT_SECRET: joi.string().required(),
     AZURE_TENANT_ID: joi.string().required(),
+    MINECRAFT_SERVER_COMMANDS_MICROSERVICE_HOST: joi.string().required(),
+    MINECRAFT_SERVER_COMMANDS_MICROSERVICE_PORT: joi.number().required(),
   })
   .unknown(true);
 
@@ -86,5 +90,9 @@ export const envs = {
     clientId: envsVariables.AZURE_CLIENT_ID,
     clientSecret: envsVariables.AZURE_CLIENT_SECRET,
     tenantId: envsVariables.AZURE_TENANT_ID,
+  },
+  minecraftServerCommandsMicroservice: {
+    host: envsVariables.MINECRAFT_SERVER_COMMANDS_MICROSERVICE_HOST,
+    port: envsVariables.MINECRAFT_SERVER_COMMANDS_MICROSERVICE_PORT,
   },
 };
